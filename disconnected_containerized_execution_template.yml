@@ -28,7 +28,8 @@ jobs:
             target: mycontainer
 
           - script: |
-              docker run apt-get update && apt-get install -y curl
+              docker exec mycontainer1 apt-get update
+              docker exec mycontainer1 apt-get install curl
             displayName: 'curl install'
             target: host
 
