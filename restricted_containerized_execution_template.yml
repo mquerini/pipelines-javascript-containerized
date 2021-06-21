@@ -43,7 +43,6 @@ jobs:
 #            displayName: 'curl install'
 #            target: mycontainer
 
-
           - script: |
               npm install
             displayName: 'npm install'
