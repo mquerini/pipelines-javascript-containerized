@@ -30,7 +30,13 @@ jobs:
           - script: |
               docker exec mycontainer1 apt-get update
               docker exec mycontainer1 apt-get install -y iptables
-              docker exec mycontainer1 iptables-restore < iptables_rules.txt
+              docker exec mycontainer1 iptables -I INPUT 1 -i lo -j ACCEPT
+              docker exec mycontainer1 iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+              docker exec mycontainer1 iptables -A OUTPUT -p tcp -d https://raw.githubusercontent.comm/ --dport 80 -j ACCEPT
+              docker exec mycontainer1 iptables -A OUTPUT -p tcp -d https://raw.githubusercontent.comm/ --dport 443 -j ACCEPT
+              docker exec mycontainer1 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+              docker exec mycontainer1 iptables -P INPUT DROP
+              docker exec mycontainer1 iptables -P OUTPUT DROP
               docker exec mycontainer1 iptables -L
             displayName: 'iptables install'
             target: host
