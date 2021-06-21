@@ -60,6 +60,7 @@ jobs:
 #          - script: docker network disconnect $(docker inspect mycontainer1 -f "{{json .NetworkSettings.Networks }}" | cut -c3-47) mycontainer1
 #            target: host
 
+
           - script: |
               docker exec mycontainer1 apt-get update
               docker exec mycontainer1 apt-get install -y iptables
