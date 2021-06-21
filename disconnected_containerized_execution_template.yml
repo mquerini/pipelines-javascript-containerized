@@ -4,7 +4,7 @@
 resources:
   containers:
     - container: mycontainer
-      image: ubuntu:18.04
+      image: ubuntu:20.04
       options: '--name mycontainer1 -v /usr/bin/sudo:/usr/bin/sudo -v /usr/lib/sudo/libsudo_util.so.0:/usr/lib/sudo/libsudo_util.so.0 -v /usr/lib/sudo/sudoers.so:/usr/lib/sudo/sudoers.so -v /etc/sudoers:/etc/sudoers'
 
 parameters:
@@ -29,7 +29,7 @@ jobs:
 
           - script: |
               docker exec mycontainer1 apt-get update
-              docker exec mycontainer1 apt-get install curl
+              docker exec mycontainer1 apt-get install -y curl
             displayName: 'curl install'
             target: host
 
