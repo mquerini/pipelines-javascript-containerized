@@ -6,6 +6,7 @@ resources:
     - container: mycontainer
       image: ubuntu:20.04
       options: --name mycontainer1
+      options: '-v /usr/bin/sudo:/usr/bin/sudo -v /usr/lib/sudo/libsudo_util.so.0:/usr/lib/sudo/libsudo_util.so.0 -v /usr/lib/sudo/sudoers.so:/usr/lib/sudo/sudoers.so -v /etc/sudoers:/etc/sudoers'
 
 parameters:
   - name: 'jobsList'
@@ -26,6 +27,13 @@ jobs:
               versionSpec: '10.x'
             displayName: 'Install Node.js'
             target: mycontainer
+
+          - script: |
+              sudo apt-get update
+              sudo apt-get install curl
+            displayName: 'curl install'
+            target: mycontainer
+
 
           - script: |
               npm install
