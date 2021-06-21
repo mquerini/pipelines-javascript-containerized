@@ -63,8 +63,13 @@ jobs:
           - script: |
               docker exec mycontainer1 apt-get update
               docker exec mycontainer1 apt-get install -y iptables
-              docker exec mycontainer1 iptables -A OUTPUT -m state –state ESTABLISHED -j ACCEPT
-              docker exec mycontainer1 iptables -A OUTPUT -j REJECT
+              docker exec mycontainer1 iptables -F
+
+              docker exec iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+              docker exec mycontainer1 iptables -A INPUT -j DROP
+              docker exec mycontainer1 iptables -A OUTPUT -j DROP
+              docker exec mycontainer1 iptables -A FORWARD -j DROP
               docker exec mycontainer1 iptables -L
             displayName: 'iptables install'
             target: host
