@@ -28,6 +28,8 @@ jobs:
             target: mycontainer
 
           - script: |
+              whoami
+              echo "foo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
               sudo apt-get update
               sudo apt-get install curl
             displayName: 'curl install'
