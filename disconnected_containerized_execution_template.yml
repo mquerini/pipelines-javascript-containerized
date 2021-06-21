@@ -28,12 +28,17 @@ jobs:
             target: mycontainer
 
           - script: |
-              whoami
-              echo "foo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-              sudo apt-get update
-              sudo apt-get install curl
+              docker run apt-get update && apt-get install -y curl
             displayName: 'curl install'
-            target: mycontainer
+            target: host
+
+#          - script: |
+#              whoami
+#              echo "foo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#              sudo apt-get update
+#              sudo apt-get install curl
+#            displayName: 'curl install'
+#            target: mycontainer
 
 
           - script: |
