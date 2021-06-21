@@ -60,13 +60,11 @@ jobs:
 #          - script: docker network disconnect $(docker inspect mycontainer1 -f "{{json .NetworkSettings.Networks }}" | cut -c3-47) mycontainer1
 #            target: host
 
-
           - script: |
               docker exec mycontainer1 apt-get update
               docker exec mycontainer1 apt-get install -y iptables
-              docker exec iptables -A OUTPUT -p tcp -m string --string raw.githubusercontent.com --algo kmp -j ACCEPTS
-              docker exec mycontainer1 iptables -P INPUT DROP
-              docker exec mycontainer1 iptables -P OUTPUT DROP
+              docker exec mycontainer1 iptables -A OUTPUT -m state –state ESTABLISHED -j ACCEPT
+              docker exec mycontainer1 iptables -A OUTPUT -j REJECT
               docker exec mycontainer1 iptables -L
             displayName: 'iptables install'
             target: host
