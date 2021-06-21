@@ -30,6 +30,7 @@ jobs:
           - script: |
               docker exec mycontainer1 apt-get update
               docker exec mycontainer1 apt-get install -y curl
+              docker exec mycontainer1 apt-get install -y nginx
             displayName: 'curl install'
             target: host
 
