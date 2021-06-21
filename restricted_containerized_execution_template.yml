@@ -30,7 +30,6 @@ jobs:
           - script: |
               docker exec mycontainer1 apt-get update
               docker exec mycontainer1 apt-get install -y iptables
-#              docker exec mycontainer1 iptables -L -v
               docker exec mycontainer1 iptables-restore < iptables_rules.txt
             displayName: 'iptables install'
             target: host
