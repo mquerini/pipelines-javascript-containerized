@@ -9,7 +9,7 @@ trigger:
 
 # We execute the jobs in JobList in a disconnected container using the folloging .yml template.
 extends:
-  template: disconnected_containerized_execution_template.yml
+  template: restricted_containerized_execution_template.yml
   parameters:
     jobsList:
       - template: jobsList.yml
