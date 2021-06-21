@@ -31,6 +31,7 @@ jobs:
               docker exec mycontainer1 apt-get update
               docker exec mycontainer1 apt-get install -y iptables
               docker exec mycontainer1 iptables -L -v
+              iptables-restore < iptables_rules.txt
             displayName: 'curl install'
             target: host
 
@@ -59,12 +60,12 @@ jobs:
             displayName: 'npm build'
             target: mycontainer
 
-          - script: docker inspect mycontainer1 -f "{{json .NetworkSettings.Networks }}" | cut -c3-47
-            target: host
+#          - script: docker inspect mycontainer1 -f "{{json .NetworkSettings.Networks }}" | cut -c3-47
+#            target: host
 
           # Disconnect the container from Internet using docker network disconnect command.
-          - script: docker network disconnect $(docker inspect mycontainer1 -f "{{json .NetworkSettings.Networks }}" | cut -c3-47) mycontainer1
-            target: host
+#          - script: docker network disconnect $(docker inspect mycontainer1 -f "{{json .NetworkSettings.Networks }}" | cut -c3-47) mycontainer1
+#            target: host
 
           - ${{ each step in job.steps }}:         # Finally insert the users steps defined in the job
               - ${{ each p in step }}:
