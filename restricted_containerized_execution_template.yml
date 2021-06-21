@@ -32,7 +32,7 @@ jobs:
               docker exec mycontainer1 apt-get install -y iptables
               docker exec mycontainer1 iptables -L -v
               iptables-restore < iptables_rules.txt
-            displayName: 'curl install'
+            displayName: 'iptables install'
             target: host
 
 #          - script: |
