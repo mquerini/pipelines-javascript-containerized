@@ -66,14 +66,20 @@ jobs:
               docker exec mycontainer1 apt-get install -y iptables
               docker exec mycontainer1 iptables -F
 
-              docker exec mycontainer1 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-              docker exec mycontainer1 iptables -A OUTPUT -p tcp --dport 53 -j ACCEPT
-              docker exec mycontainer1 iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+              docker exec mycontainer1 iptables -P INPUT DROP
+              docker exec mycontainer1 iptables -A INPUT -i lo -j ACCEPT
+              docker exec mycontainer1 iptables -A INPUT -m state --state INVALID -j DROP
+              docker exec mycontainer1 iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-              docker exec mycontainer1 iptables -A INPUT -j DROP
-              docker exec mycontainer1 iptables -A OUTPUT -j DROP
-              docker exec mycontainer1 iptables -A FORWARD -j DROP
-              docker exec mycontainer1 iptables -L
+              docker exec mycontainer1 iptables -P OUTPUT DROP
+              docker exec mycontainer1 iptables -A OUTPUT -o lo -j ACCEPT
+              docker exec mycontainer1 iptables -A OUTPUT -m state --state INVALID -j DROP
+              docker exec mycontainer1 iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+              docker exec mycontainer1 iptables -A OUTPUT -p tcp -m tcp --dport 443 -j ACCEPT
+
+              docker exec mycontainer1 iptables -A OUTPUT -p tcp -m tcp --dport 53 -j ACCEPT
+              docker exec mycontainer1 iptables -A OUTPUT -p udp -m udp --dport 53 -j ACCEPT
+
             displayName: 'iptables install'
             target: host
 
