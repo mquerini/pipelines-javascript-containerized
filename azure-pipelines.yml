@@ -1,0 +1,18 @@
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=azure-devops
+# https://docs.docker.com/network/none/
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=azure-devops#options
+# https://github.com/microsoft/azure-pipelines-yaml/blob/master/design/step-target.md
+# https://github.com/microsoft/azure-pipelines-yaml/blob/master/design/step-target-restricted-mode.md
+
+trigger:
+- master
+
+# We execute the jobs in JobList in a disconnected container using the folloging .yml template.
+extends:
+  template: disconnected_containerized_execution_template.yml
+  parameters:
+    jobsList:
+      - template: jobsList.yml
+    requiredPreSteps:
+      - script: |
+          npm install -g oval

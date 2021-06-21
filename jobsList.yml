@@ -1,0 +1,28 @@
+# We define a list of jobs (to be executed in a container disconnected from Internet
+# in azure-pipelines.yml)
+
+jobs:
+  - job: job1
+    steps:
+        - script: |
+            # By convention, we expose api specifications using files
+            #  in form api_<api-name>.yaml in the root of this project
+            valid=1
+            for apispec in $(ls api_*.yaml); do
+              echo "validating $apispec"
+              npx oval validate -p $apispec
+              result=$?
+              if [ ! $result = 0 ]; then
+                valid=0
+                echo "$apispec failed with code $result"
+              fi
+            done
+            [[ $valid = 1 ]] && exit 0 || exit 1
+          displayName: 'Validate API specifications'
+  - job: job2
+    steps:
+      - script: |
+          npm install
+          npm install node-curl-cli -g
+          npm run build
+        displayName: 'npm install node-curl-cli and build'

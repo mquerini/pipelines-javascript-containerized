@@ -1,0 +1,58 @@
+# We define a template that can be extended in order to execute jobs (passed ad parameters)
+# in a container which is disconnected from Internet (for security issues).
+
+resources:
+  containers:
+    - container: mycontainer
+      image: ubuntu:20.04
+      options: --name mycontainer1
+
+parameters:
+  - name: 'jobsList'
+    type: jobList
+    default: []
+  - name: 'requiredPreSteps'
+    type: stepList
+    default: []
+
+jobs:
+  - ${{ each job in parameters.jobsList }}:      # Process Each job
+      - ${{ each pair in job }}:
+          ${{ if ne(pair.key, 'steps') }}:       # Insert all properties other than "steps"
+            ${{ pair.key }}: ${{ pair.value }}
+        steps:                                   # Wrap the steps
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '10.x'
+            displayName: 'Install Node.js'
+            target: mycontainer
+
+          - script: |
+              npm install
+            displayName: 'npm install'
+            target: mycontainer
+
+          - ${{ each prestep in parameters.requiredPreSteps }}:
+            - ${{ each ps in prestep }}:
+                ${{ ps.key }}: ${{ ps.value }}
+              target:
+                container: mycontainer
+
+          - script: |
+              npm run build
+            displayName: 'npm build'
+            target: mycontainer
+
+          - script: docker inspect mycontainer1 -f "{{json .NetworkSettings.Networks }}" | cut -c3-47
+            target: host
+
+          # Disconnect the container from Internet using docker network disconnect command.
+          - script: docker network disconnect $(docker inspect mycontainer1 -f "{{json .NetworkSettings.Networks }}" | cut -c3-47) mycontainer1
+            target: host
+
+          - ${{ each step in job.steps }}:         # Finally insert the users steps defined in the job
+              - ${{ each p in step }}:
+                  ${{ p.key }}: ${{ p.value }}
+                target:
+                  container: mycontainer
+                  commands: restricted
