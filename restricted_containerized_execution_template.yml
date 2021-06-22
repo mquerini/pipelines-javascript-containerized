@@ -5,7 +5,7 @@ resources:
   containers:
     - container: mycontainer
       image: ubuntu:20.04
-      options: '--cap-add=NET_ADMIN --name mycontainer1 -v /usr/bin/sudo:/usr/bin/sudo -v /usr/lib/sudo/libsudo_util.so.0:/usr/lib/sudo/libsudo_util.so.0 -v /usr/lib/sudo/sudoers.so:/usr/lib/sudo/sudoers.so -v /etc/sudoers:/etc/sudoers'
+      options: '--cap-add=NET_ADMIN --name mycontainer1'
 
 parameters:
   - name: 'jobsList'

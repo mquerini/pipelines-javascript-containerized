@@ -1,7 +1,5 @@
-iptables -I INPUT 1 -i lo -j ACCEPT
-iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
-iptables -A OUTPUT -p tcp -d https://raw.githubusercontent.comm/ --dport 80 -j ACCEPT
-iptables -A OUTPUT -p tcp -d https://raw.githubusercontent.comm/ --dport 443 -j ACCEPT
-iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-iptables -P INPUT DROP
-iptables -P OUTPUT DROP
+# E.g., Blocking all Network Traffic
+# iptables -F
+# iptables -A INPUT -j REJECT
+# iptables -A OUTPUT -j REJECT
+# iptables -A FORWARD -j REJECT
