@@ -27,16 +27,6 @@ jobs:
             displayName: 'Install Node.js'
             target: mycontainer
 
-
-
-#          - script: |
-#              whoami
-#              echo "foo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-#              sudo apt-get update
-#              sudo apt-get install curl
-#            displayName: 'curl install'
-#            target: mycontainer
-
           - script: |
               npm install
             displayName: 'npm install'
@@ -53,12 +43,6 @@ jobs:
             displayName: 'npm build'
             target: mycontainer
 
-#          - script: docker inspect mycontainer1 -f "{{json .NetworkSettings.Networks }}" | cut -c3-47
-#            target: host
-
-          # Disconnect the container from Internet using docker network disconnect command.
-#          - script: docker network disconnect $(docker inspect mycontainer1 -f "{{json .NetworkSettings.Networks }}" | cut -c3-47) mycontainer1
-#            target: host
 
           - script: |
               docker exec mycontainer1 apt-get update
