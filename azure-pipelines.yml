@@ -15,4 +15,6 @@ extends:
       - template: jobsList.yml
     requiredPreSteps:
       - script: |
+          npm install
           npm install -g oval
+          npm build

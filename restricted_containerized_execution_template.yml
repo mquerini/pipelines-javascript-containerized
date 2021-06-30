@@ -21,28 +21,12 @@ jobs:
           ${{ if ne(pair.key, 'steps') }}:       # Insert all properties other than "steps"
             ${{ pair.key }}: ${{ pair.value }}
         steps:                                   # Wrap the steps
-          - task: NodeTool@0
-            inputs:
-              versionSpec: '10.x'
-            displayName: 'Install Node.js'
-            target: mycontainer
-
-          - script: |
-              npm install
-            displayName: 'npm install'
-            target: mycontainer
 
           - ${{ each prestep in parameters.requiredPreSteps }}:
             - ${{ each ps in prestep }}:
                 ${{ ps.key }}: ${{ ps.value }}
               target:
                 container: mycontainer
-
-          - script: |
-              npm run build
-            displayName: 'npm build'
-            target: mycontainer
-
 
           - script: |
               docker exec mycontainer1 apt-get update
