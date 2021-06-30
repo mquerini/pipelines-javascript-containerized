@@ -14,6 +14,10 @@ extends:
     jobsList:
       - template: jobsList.yml
     requiredPreSteps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '12.x'
+        displayName: 'Install Node.js'
       - script: |
           npm install
           npm install -g oval
